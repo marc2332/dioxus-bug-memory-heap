@@ -113,21 +113,15 @@ async fn main() {
 }
 
 fn app(cx: Scope) -> Element {
-    let colors = use_state(&cx, || vec!["green", "blue", "red"]);
     let padding = use_state(&cx, || 10);
-
-    use_effect(&cx, colors, |colors| async move {
-        sleep(Duration::from_millis(1)).await;
-        colors.with_mut(|colors| colors.reverse());
-    });
 
     use_effect(&cx, padding, |padding| async move {
         sleep(Duration::from_millis(1)).await;
         padding.with_mut(|padding| {
-            if *padding < 65 {
+            if *padding < 2000 {
                 *padding += 1;
             } else {
-                *padding = 5;
+                *padding = 0;
             }
         });
     });
