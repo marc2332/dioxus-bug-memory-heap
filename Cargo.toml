@@ -1,0 +1,14 @@
+[package]
+name = "dioxus-bug-memory-heap"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.17.0", features = ["sync", "rt-multi-thread", "time", "macros"] }
+dioxus-native-core-macro = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes"  }
+dioxus = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-rsx = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-native-core = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-core-macro = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-hooks = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-core = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes", features = ["sync_attributes"] }
