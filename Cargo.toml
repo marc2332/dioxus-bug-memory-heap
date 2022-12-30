@@ -5,13 +5,13 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.17.0", features = ["sync", "rt-multi-thread", "time", "macros"] }
-dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus" }
-dioxus = { git = "https://github.com/DioxusLabs/dioxus"}
-dioxus-rsx = { git = "https://github.com/DioxusLabs/dioxus"}
-dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus"}
-dioxus-core-macro = { git = "https://github.com/DioxusLabs/dioxus"}
-dioxus-hooks = { git = "https://github.com/DioxusLabs/dioxus"}
-dioxus-core = { git = "https://github.com/DioxusLabs/dioxus" }
+dioxus-native-core-macro = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-rsx = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-native-core = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-core-macro = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-hooks = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
+dioxus-core = { git = "https://github.com/Demonthos/dioxus", branch="fix-non-str-attributes" }
 gl = "*"
 glutin_tao = { version = "0.30.1", features = ["serde"]}
 skia-safe = { version = "0.56.1", features = ["gl", "textlayout", "svg"] }

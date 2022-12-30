@@ -433,7 +433,7 @@ dependencies = [
 [[package]]
 name = "dioxus"
 version = "0.2.4"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "dioxus-core",
  "dioxus-core-macro",
@@ -462,7 +462,7 @@ dependencies = [
 [[package]]
 name = "dioxus-core"
 version = "0.2.1"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "bumpalo",
  "futures-channel",
@@ -479,7 +479,7 @@ dependencies = [
 [[package]]
 name = "dioxus-core-macro"
 version = "0.2.1"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "dioxus-rsx",
  "proc-macro2",
@@ -490,7 +490,7 @@ dependencies = [
 [[package]]
 name = "dioxus-hooks"
 version = "0.2.1"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "dioxus-core",
  "futures-channel",
@@ -500,7 +500,7 @@ dependencies = [
 [[package]]
 name = "dioxus-html"
 version = "0.2.1"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "async-trait",
  "dioxus-core",
@@ -515,7 +515,7 @@ dependencies = [
 [[package]]
 name = "dioxus-native-core"
 version = "0.2.0"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "anymap",
  "crossbeam-deque",
@@ -533,8 +533,9 @@ dependencies = [
 [[package]]
 name = "dioxus-native-core-macro"
 version = "0.2.0"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
+ "dioxus",
  "dioxus-native-core",
  "quote",
  "syn",
@@ -543,7 +544,7 @@ dependencies = [
 [[package]]
 name = "dioxus-rsx"
 version = "0.0.1"
-source = "git+https://github.com/DioxusLabs/dioxus#3cfaaea7ea058483fb034c0b434042fd75c69a6e"
+source = "git+https://github.com/Demonthos/dioxus?branch=fix-non-str-attributes#845f2fb7a9417dade313d4afe075a016125bd003"
 dependencies = [
  "dioxus-core",
  "internment",
