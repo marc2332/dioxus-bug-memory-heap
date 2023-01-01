@@ -4,7 +4,12 @@ use dioxus::core::{VirtualDom, Element};
 use dioxus_core::Scope;
 use futures_util::task::ArcWake;
 use futures_util::{pin_mut, FutureExt};
+use gl::types::GLint;
+use glutin::GlProfile;
 use glutin::event::{Event, StartCause};
+use skia_safe::{Surface, ColorType};
+use skia_safe::gpu::{BackendRenderTarget, SurfaceOrigin};
+use skia_safe::gpu::gl::FramebufferInfo;
 use tokio::time::sleep;
 use dioxus_native_core::{SendAnyMap, real_dom::RealDom, state::{State, ParentDepState}, node_ref::{NodeView, AttributeMask}, NodeMask};
 use dioxus_native_core_macro::{sorted_str_slice, State};
@@ -93,8 +98,15 @@ mod dioxus_elements {
 }
 
 
-#[tokio::main]
-async fn main() {
+fn main() {
+
+    let rt = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+
+    let _guard = rt.enter();
+
     let rdom = Arc::new(Mutex::new(RealDom::<NodeState>::new()));
     let mut dom = VirtualDom::new(app);
 
@@ -106,14 +118,40 @@ async fn main() {
 
     let event_loop = EventLoop::<()>::with_user_event();
 
-    let window = WindowBuilder::new()
-        .with_title("test")
-        .build(&event_loop)
-        .unwrap();
-
     let proxy = event_loop.create_proxy();
 
     let waker = tao_waker(&proxy);
+
+    let wb = WindowBuilder::new()
+        .with_title("test");
+
+    let cb = glutin::ContextBuilder::new()
+        .with_depth_buffer(0)
+        .with_stencil_buffer(8)
+        .with_pixel_format(24, 8)
+        .with_gl_profile(GlProfile::Core);
+
+    let windowed_context = cb.build_windowed(wb, &event_loop).unwrap();
+
+    let windowed_context = unsafe { windowed_context.make_current().unwrap() };
+
+    gl::load_with(|s| windowed_context.get_proc_address(s));
+
+    let fb_info = {
+        let mut fboid: GLint = 0;
+        unsafe { gl::GetIntegerv(gl::FRAMEBUFFER_BINDING, &mut fboid) };
+
+        FramebufferInfo {
+            fboid: fboid.try_into().unwrap(),
+            format: skia_safe::gpu::gl::Format::RGBA8.into(),
+        }
+    };
+
+    let mut gr_context = skia_safe::gpu::DirectContext::new_gl(None, None).unwrap();
+
+    let mut surface = create_surface(&windowed_context, &fb_info, &mut gr_context);
+    let sf = windowed_context.window().scale_factor() as f32;
+    surface.canvas().scale((sf, sf));
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -123,16 +161,17 @@ async fn main() {
                 println!("NOW");
                 _ = proxy.send_event(());
             },
-            Event::MainEventsCleared => {
-                window.request_redraw();
-            },
             Event::UserEvent(_) => {
                 println!("polling");
                 poll_vdom(&waker, &mut dom, &rdom);
             },
+            Event::WindowEvent { .. } => {
+                windowed_context.window().request_redraw();
+            }
             Event::LoopDestroyed => {}
             Event::RedrawRequested(_) => {
-              
+                gr_context.flush(None);
+                windowed_context.swap_buffers().unwrap();
             }
             _ => (),
         }
@@ -201,4 +240,33 @@ fn app(cx: Scope) -> Element {
     render!(
         blabla { }
     )
+}
+
+type WindowedContext = glutin::ContextWrapper<glutin::PossiblyCurrent, glutin::window::Window>;
+
+pub fn create_surface(
+    windowed_context: &WindowedContext,
+    fb_info: &FramebufferInfo,
+    gr_context: &mut skia_safe::gpu::DirectContext,
+) -> Surface {
+    let pixel_format = windowed_context.get_pixel_format();
+    let size = windowed_context.window().inner_size();
+    let backend_render_target = BackendRenderTarget::new_gl(
+        (
+            size.width.try_into().unwrap(),
+            size.height.try_into().unwrap(),
+        ),
+        pixel_format.multisampling.map(|s| s.try_into().unwrap()),
+        pixel_format.stencil_bits.try_into().unwrap(),
+        *fb_info,
+    );
+    Surface::from_backend_render_target(
+        gr_context,
+        &backend_render_target,
+        SurfaceOrigin::BottomLeft,
+        ColorType::RGBA8888,
+        None,
+        None,
+    )
+    .unwrap()
 }
